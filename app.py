@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from transformers import DistilBertTokenizer, DistilBertModel, DistilBertConfig
 import torch
 import torch.nn as nn
@@ -35,6 +35,10 @@ def classify_text(text, model, tokenizer):
         model_output = model(**tokenized_text)
     pred = torch.sigmoid(model_output).item()
     return {"prediction": "positive" if pred > 0.5 else "negative", "score": pred}
+
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 @app.route('/classify', methods=['POST'])
 def classify():
